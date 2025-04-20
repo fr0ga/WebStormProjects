@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editable Table with Sorting and Bootstrap</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="StyleTest.css">
+  <script src="index.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">Editable Table</h1>
+  <button class="btn btn-primary mb-3" onclick="showForm()">Добавить запись</button>
+  <table class="table table-bordered" id="dataTable">
+    <thead class="thead-light">
+    <tr>
+      <th onclick="sortTable(0)">Имя</th>
+      <th onclick="sortTable(1)">Телефон</th>
+      <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Rows will be added here dynamically -->
+    </tbody>
+  </table>
+</div>
+
+<div class="form-container" id="formContainer">
+  <h2 id="formTitle">Добавить запись</h2>
+  <form id="dataForm">
+    <div class="form-group">
+      <label for="name">Имя:</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Телефон:</label>
+      <input type="text" class="form-control" id="phone" name="phone" required>
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <button type="button" class="btn btn-secondary" onclick="hideForm()">Отмена</button>
+  </form>
+</div>
+<script>
+  let editingRow = null;
+
+  document.getElementById('dataForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+
+  if (editingRow) {
+  editingRow.cells[0].innerText = name;
+  editingRow.cells[1].innerText = phone;
+  editingRow = null;
+  } else {
+  addRow(name, phone);
+  }
+
+  hideForm();
+  });
+
+
+</script>
+
+</body>
+</html>
