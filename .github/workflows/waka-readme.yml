@@ -18,4 +18,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }} # optional if on profile readme
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }} # required
           REPOSITORY: fr0ga/WebStormProjects # optional
+          TIME_RANGE: all_time # optional
        
