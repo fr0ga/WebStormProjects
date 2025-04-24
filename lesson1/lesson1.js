@@ -105,3 +105,10 @@ function multiple3(a,b,c) {
     return res;
 
 }
+
+function multiple4(a,b,c) {
+    let res = a * b * c;
+    return res;
+
+}
+
