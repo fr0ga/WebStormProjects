@@ -1,16 +1,42 @@
-body {
+/* Обёртка на весь экран */
+html, body {
     margin: 0;
-    overflow: hidden;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4;
+}
+
+/* Шапка и подвал */
+header, footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+}
+
+/* Контейнер, который растягивается */
 .game-area {
-    width: 100vw;
-    height: 100vh;
+    flex: 1; /* занимает всё оставшееся пространство */
     position: relative;
-    background-color: #f2f2f2;
+    background-color: #ccc;
+    margin: 0 auto;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+/* Танк */
 .tank {
     position: absolute;
     width: 50px;
     height: 50px;
-    transform-origin: center;
+    top: 150px;
+    left: 150px;
 }
