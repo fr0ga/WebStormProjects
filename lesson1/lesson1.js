@@ -1,6 +1,6 @@
 console.log("Hello JS!");
 
-let a;
+let a = 0;//added = 0
 // asdasdasd
 console.log(a);
 const d = 'bye';
@@ -31,18 +31,20 @@ console.log(`res = ${res}`);
 res = 5 / undefined;
 console.log(`res = ${res}`);
 
-a = false == 0; /* === сравнивает приводя всё к числам */
-console.log(a);
+//a = false == 0; /* === сравнивает приводя всё к числам */
+//console.log(a);
 a = false === 0; /* === сравнивает сначала ТИПЫ (если разные то false) */
 console.log(a);
 
 
 a = true;
-a == 1;
-console.log(a == 1);
+console.log(a);
+a = 1; // fixed
+console.log(a === 1); // == 1 fixed
 
-a === 1;
+a = 1; // fixed
 console.log(a === 1);
+
 
 res = 5;
 switch (res) {
@@ -91,23 +93,23 @@ res = multiple(x,y);
 console.log(`res = ${res}`)
 
 function add(a,b) {
-    let res = a + b;
+    res = a + b;
     return res;
 }
 
 function multiple(a,b) {
-    let res = a * b;
+    res = a * b;
     return res;
 }
 
 function multiple3(a,b,c) {
-    let res = a * b * c;
+    res = a * b * c;
     return res;
 
 }
 
 function multiple4(a,b,c) {
-    let res = a * b * c;
+    res = a * b * c;
     return res;
 
 }
