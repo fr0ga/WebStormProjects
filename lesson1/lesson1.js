@@ -38,11 +38,13 @@ console.log(a);
 
 
 a = true;
+console.log(a);
 a = 1; // fixed
-console.log(a == 1);
+console.log(a === 1); // == 1 fixed
 
 a = 1; // fixed
 console.log(a === 1);
+
 
 res = 5;
 switch (res) {
