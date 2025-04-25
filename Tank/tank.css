@@ -17,7 +17,12 @@ header, footer {
     background-color: #222;
     color: white;
     text-align: center;
-    padding: 15px 0;
+    padding: 10px;
+    height: 50px;
+}
+h1 {
+    text-align: center;
+    margin-top: 10px;
 }
 
 /* Контейнер, который растягивается */
