@@ -1,4 +1,4 @@
-// tank.js
+// Tank.js
 
 let player = null; // Текущий игрок (green или red)
 const tanks = {
