@@ -9,17 +9,23 @@
       font-family: Arial, sans-serif;
       margin-top: 50px;
     }
+    h2{
+      text-align: center;
+    }
+    .button{
+      text-align: center;
+    }
     .game-area {
       position: relative;
-      width: 800px;
-      height: 400px;
+      width: 1000px;
+      height: 450px;
       border: 1px solid black;
       margin: 20px auto;
       background-color: lightgray;
       overflow: hidden;
     }
     svg.tank {
-      position: relative;
+      position: absolute;
       width: 50px;
       height: 50px;
     }
@@ -27,16 +33,20 @@
       margin: 10px;
       padding: 10px 20px;
       font-size: 16px;
+      text-align: center;
     }
     #status {
       margin-top: 20px;
       font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-<h1>Tank Game</h1>
-<button id="join">Join the Game</button>
+<h2>Tank Game</h2>
+<div class="button">
+  <button id="join">Join the Game</button>
+</div>
 <div id="status">Status: Not connected</div>
 <div class="game-area">
   <!-- Зеленый танк -->
@@ -64,7 +74,7 @@
   let greenTankPosition = { x: 100, y: 100 };
   let greenTankAngle = 0;
 
-  let redTankPosition = { x: 100, y: 300 };
+  let redTankPosition = { x: 100, y: 200 };
   let redTankAngle = 0;
 
   const keysPressed = {};
@@ -152,18 +162,18 @@
         greenTankAngle += turnStep;
       }
     } else if (player === 'red') {
-      if (keysPressed['KeyW']) {
+      if (keysPressed['ArrowUp']) {
         redTankPosition.x += step * Math.cos((redTankAngle * Math.PI) / 180);
         redTankPosition.y += step * Math.sin((redTankAngle * Math.PI) / 180);
       }
-      if (keysPressed['KeyS']) {
+      if (keysPressed['ArrowDown']) {
         redTankPosition.x -= step * Math.cos((redTankAngle * Math.PI) / 180);
         redTankPosition.y -= step * Math.sin((redTankAngle * Math.PI) / 180);
       }
-      if (keysPressed['KeyA']) {
+      if (keysPressed['ArrowLeft']) {
         redTankAngle -= turnStep;
       }
-      if (keysPressed['KeyD']) {
+      if (keysPressed['ArrowRight']) {
         redTankAngle += turnStep;
       }
     }

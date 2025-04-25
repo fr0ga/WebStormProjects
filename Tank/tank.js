@@ -3,7 +3,7 @@
 let player = null; // Текущий игрок (green или red)
 const tanks = {
     green: { x: 100, y: 100, angle: 0, element: document.getElementById('greenTank') },
-    red: { x: 300, y: 300, angle: 0, element: document.getElementById('redTank') }
+    red: { x: 100, y: 200, angle: 0, element: document.getElementById('redTank') }
 };
 
 // Подключение к серверу WebSocket
@@ -41,8 +41,7 @@ function updateTankPosition(player, x, y, angle) {
     tank.y = y;
     tank.angle = angle;
 
-    const transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
-    tank.element.style.transform = transform;
+    tank.element.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
 }
 
 // Инициализация управления
