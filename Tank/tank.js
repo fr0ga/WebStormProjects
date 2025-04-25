@@ -1,82 +1,86 @@
-const greenTank = document.getElementById('greenTank');
-const redTank = document.getElementById('redTank');
-const gameArea = document.querySelector('.game-area');
+// tank.js
 
-// Позиции и углы танков
-let greenTankPosition = { x: 100, y: 100 };
-let greenTankAngle = 0;
+// Переменные для управления танками
+let player = null; // Текущий игрок (green или red)
+const tanks = {
+    green: { x: 100, y: 100, angle: 0, element: document.getElementById('greenTank') },
+    red: { x: 300, y: 300, angle: 0, element: document.getElementById('redTank') }
+};
 
-let redTankPosition = { x: 300, y: 300 };
-let redTankAngle = 0;
+// Подключение к серверу WebSocket
+const ws = new WebSocket('ws://localhost:80');
 
-const keysPressed = {};
+ws.onopen = () => {
+    console.log('WebSocket connection established.');
+};
 
-function updateTankPosition(tank, position, angle) {
-    tank.style.transform = `translate(${position.x}px, ${position.y}px) rotate(${angle}deg)`;
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('Received:', data);
+
+    // Обновление позиции танков
+    if (data.type === 'update') {
+        updateTankPosition(data.player, data.x, data.y, data.angle);
+    }
+
+    // Назначение игрока
+    if (data.type === 'assign') {
+        player = data.player;
+        console.log(`You are ${player} tank.`);
+    }
+
+    // Обработка ошибок
+    if (data.type === 'error') {
+        console.error('Error:', data.message);
+    }
+};
+
+// Обработка изменения позиции танка
+function updateTankPosition(player, x, y, angle) {
+    const tank = tanks[player];
+    tank.x = x;
+    tank.y = y;
+    tank.angle = angle;
+
+    const transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
+    tank.element.style.transform = transform;
 }
 
-// Инициализация танков
-updateTankPosition(greenTank, greenTankPosition, greenTankAngle);
-updateTankPosition(redTank, redTankPosition, redTankAngle);
+// Инициализация управления
+window.onload = () => {
+    document.addEventListener('keydown', (event) => handleKeyPress(event));
+};
 
-// Обработка событий клавиш
-document.addEventListener('keydown', (e) => {
-    keysPressed[e.code] = true;
-});
+// Обработка нажатия клавиш
+function handleKeyPress(event) {
+    if (!player) return;
 
-document.addEventListener('keyup', (e) => {
-    keysPressed[e.code] = false;
-});
+    const tank = tanks[player];
+    const speed = 5;
 
-function updateGame() {
-    const step = 5; // шаг движения
-    const turnStep = 5; // шаг поворота
-
-    // Управление зеленым танком (стрелки)
-    if (keysPressed['ArrowUp']) {
-        greenTankPosition.x += step * Math.cos((greenTankAngle * Math.PI) / 180);
-        greenTankPosition.y += step * Math.sin((greenTankAngle * Math.PI) / 180);
-    }
-    if (keysPressed['ArrowDown']) {
-        greenTankPosition.x -= step * Math.cos((greenTankAngle * Math.PI) / 180);
-        greenTankPosition.y -= step * Math.sin((greenTankAngle * Math.PI) / 180);
-    }
-    if (keysPressed['ArrowLeft']) {
-        greenTankAngle -= turnStep;
-    }
-    if (keysPressed['ArrowRight']) {
-        greenTankAngle += turnStep;
+    switch (event.key) {
+        case 'ArrowUp': // Движение вперед
+            tank.y -= speed;
+            break;
+        case 'ArrowDown': // Движение назад
+            tank.y += speed;
+            break;
+        case 'ArrowLeft': // Поворот влево
+            tank.angle -= 5;
+            break;
+        case 'ArrowRight': // Поворот вправо
+            tank.angle += 5;
+            break;
     }
 
-    // Управление красным танком (WASD)
-    if (keysPressed['KeyW']) {
-        redTankPosition.x += step * Math.cos((redTankAngle * Math.PI) / 180);
-        redTankPosition.y += step * Math.sin((redTankAngle * Math.PI) / 180);
-    }
-    if (keysPressed['KeyS']) {
-        redTankPosition.x -= step * Math.cos((redTankAngle * Math.PI) / 180);
-        redTankPosition.y -= step * Math.sin((redTankAngle * Math.PI) / 180);
-    }
-    if (keysPressed['KeyA']) {
-        redTankAngle -= turnStep;
-    }
-    if (keysPressed['KeyD']) {
-        redTankAngle += turnStep;
-    }
+    // Отправка новых координат на сервер
+    ws.send(JSON.stringify({
+        type: 'move',
+        player: player,
+        x: tank.x,
+        y: tank.y,
+        angle: tank.angle
+    }));
 
-    // Ограничение движения внутри игровой области
-    greenTankPosition.x = Math.max(0, Math.min(gameArea.offsetWidth - greenTank.getBoundingClientRect().width, greenTankPosition.x));
-    greenTankPosition.y = Math.max(0, Math.min(gameArea.offsetHeight - greenTank.getBoundingClientRect().height, greenTankPosition.y));
-
-    redTankPosition.x = Math.max(0, Math.min(gameArea.offsetWidth - redTank.getBoundingClientRect().width, redTankPosition.x));
-    redTankPosition.y = Math.max(0, Math.min(gameArea.offsetHeight - redTank.getBoundingClientRect().height, redTankPosition.y));
-
-    // Обновление позиций танков
-    updateTankPosition(greenTank, greenTankPosition, greenTankAngle);
-    updateTankPosition(redTank, redTankPosition, redTankAngle);
-
-    requestAnimationFrame(updateGame);
+    updateTankPosition(player, tank.x, tank.y, tank.angle);
 }
-
-// Запуск обновления игры
-updateGame();
