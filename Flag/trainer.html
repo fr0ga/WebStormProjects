@@ -237,10 +237,19 @@
     showFlag();
   }
 
-  //test push33
 
-  // Инициализация
+
   showFlag();
 </script>
+
+<script>
+  function showCountry() {
+    const countryInfo = flags[currentIndex];
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(countryInfo.country)}`;
+    document.getElementById("country").innerHTML =
+            `${countryInfo.country}<br><span style="font-size:14px;"><a href="${mapsUrl}" target="_blank">Открыть в Google Maps</a></span>`;
+  }
+</script>
+
 </body>
 </html>
