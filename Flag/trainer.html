@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Флаги мира — тренажёр</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 40px; }
+    img { width: 300px; height: 200px; border: 1px solid #ccc; }
+    .buttons { margin-top: 20px; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    #country { margin-top: 20px; font-size: 20px; font-weight: bold; color: darkblue; }
+  </style>
+</head>
+<body>
+<h1>Угадай страну по флагу</h1>
+<img id="flag" src="" alt="Флаг">
+<div class="buttons">
+  <button onclick="showCountry()">Показать страну</button>
+  <button onclick="nextFlag()">Следующий флаг</button>
+</div>
+<div id="country"></div>
+
+<script>
+  // Массив стран: ISO-код + название
+  const flags = [
+    {code: "af", country: "Афганистан"},
+    {code: "al", country: "Албания"},
+    {code: "dz", country: "Алжир"},
+    {code: "ad", country: "Андорра"},
+    {code: "ao", country: "Ангола"},
+    {code: "ar", country: "Аргентина"},
+    {code: "am", country: "Армения"},
+    {code: "au", country: "Австралия"},
+    {code: "at", country: "Австрия"},
+    {code: "az", country: "Азербайджан"},
+    {code: "bs", country: "Багамы"},
+    {code: "bh", country: "Бахрейн"},
+    {code: "bd", country: "Бангладеш"},
+    {code: "bb", country: "Барбадос"},
+    {code: "by", country: "Беларусь"},
+    {code: "be", country: "Бельгия"},
+    {code: "bz", country: "Белиз"},
+    {code: "bj", country: "Бенин"},
+    {code: "bt", country: "Бутан"},
+    {code: "bo", country: "Боливия"},
+    {code: "ba", country: "Босния и Герцеговина"},
+    {code: "bw", country: "Ботсвана"},
+    {code: "br", country: "Бразилия"},
+    {code: "bg", country: "Болгария"},
+    {code: "bf", country: "Буркина-Фасо"},
+    {code: "bi", country: "Бурунди"},
+    {code: "kh", country: "Камбоджа"},
+    {code: "cm", country: "Камерун"},
+    {code: "ca", country: "Канада"},
+    {code: "cv", country: "Кабо-Верде"},
+    {code: "cf", country: "ЦАР"},
+    {code: "td", country: "Чад"},
+    {code: "cl", country: "Чили"},
+    {code: "cn", country: "Китай"},
+    {code: "co", country: "Колумбия"},
+    {code: "km", country: "Коморы"},
+    {code: "cg", country: "Конго"},
+    {code: "cd", country: "ДР Конго"},
+    {code: "cr", country: "Коста-Рика"},
+    {code: "hr", country: "Хорватия"},
+    {code: "cu", country: "Куба"},
+    {code: "cy", country: "Кипр"},
+    {code: "cz", country: "Чехия"},
+    {code: "dk", country: "Дания"},
+    {code: "dj", country: "Джибути"},
+    {code: "dm", country: "Доминика"},
+    {code: "do", country: "Доминиканская Республика"},
+    {code: "ec", country: "Эквадор"},
+    {code: "eg", country: "Египет"},
+    {code: "sv", country: "Сальвадор"},
+    {code: "gq", country: "Экваториальная Гвинея"},
+    {code: "er", country: "Эритрея"},
+    {code: "ee", country: "Эстония"},
+    {code: "et", country: "Эфиопия"},
+    {code: "fj", country: "Фиджи"},
+    {code: "fi", country: "Финляндия"},
+    {code: "fr", country: "Франция"},
+    {code: "ga", country: "Габон"},
+    {code: "gm", country: "Гамбия"},
+    {code: "ge", country: "Грузия"},
+    {code: "de", country: "Германия"},
+    {code: "gh", country: "Гана"},
+    {code: "gr", country: "Греция"},
+    {code: "gd", country: "Гренада"},
+    {code: "gt", country: "Гватемала"},
+    {code: "gn", country: "Гвинея"},
+    {code: "gw", country: "Гвинея-Бисау"},
+    {code: "gy", country: "Гайана"},
+    {code: "ht", country: "Гаити"},
+    {code: "hn", country: "Гондурас"},
+    {code: "hu", country: "Венгрия"},
+    {code: "is", country: "Исландия"},
+    {code: "in", country: "Индия"},
+    {code: "id", country: "Индонезия"},
+    {code: "ir", country: "Иран"},
+    {code: "iq", country: "Ирак"},
+    {code: "ie", country: "Ирландия"},
+    {code: "il", country: "Израиль"},
+    {code: "it", country: "Италия"},
+    {code: "jm", country: "Ямайка"},
+    {code: "jp", country: "Япония"},
+    {code: "jo", country: "Иордания"},
+    {code: "kz", country: "Казахстан"},
+    {code: "ke", country: "Кения"},
+    {code: "ki", country: "Кирибати"},
+    {code: "kp", country: "КНДР"},
+    {code: "kr", country: "Южная Корея"},
+    {code: "kw", country: "Кувейт"},
+    {code: "kg", country: "Киргизия"},
+    {code: "la", country: "Лаос"},
+    {code: "lv", country: "Латвия"},
+    {code: "lb", country: "Ливан"},
+    {code: "ls", country: "Лесото"},
+    {code: "lr", country: "Либерия"},
+    {code: "ly", country: "Ливия"},
+    {code: "lt", country: "Литва"},
+    {code: "lu", country: "Люксембург"},
+    {code: "mg", country: "Мадагаскар"},
+    {code: "mw", country: "Малави"},
+    {code: "my", country: "Малайзия"},
+    {code: "mv", country: "Мальдивы"},
+    {code: "ml", country: "Мали"},
+    {code: "mt", country: "Мальта"},
+    {code: "mh", country: "Маршалловы Острова"},
+    {code: "mr", country: "Мавритания"},
+    {code: "mu", country: "Маврикий"},
+    {code: "mx", country: "Мексика"},
+    {code: "fm", country: "Микронезия"},
+    {code: "md", country: "Молдова"},
+    {code: "mc", country: "Монако"},
+    {code: "mn", country: "Монголия"},
+    {code: "me", country: "Черногория"},
+    {code: "ma", country: "Марокко"},
+    {code: "mz", country: "Мозамбик"},
+    {code: "mm", country: "Мьянма"},
+    {code: "na", country: "Намибия"},
+    {code: "np", country: "Непал"},
+    {code: "nl", country: "Нидерланды"},
+    {code: "nz", country: "Новая Зеландия"},
+    {code: "ni", country: "Никарагуа"},
+    {code: "ne", country: "Нигер"},
+    {code: "ng", country: "Нигерия"},
+    {code: "mk", country: "Северная Македония"},
+    {code: "no", country: "Норвегия"},
+    {code: "om", country: "Оман"},
+    {code: "pk", country: "Пакистан"},
+    {code: "pw", country: "Палау"},
+    {code: "pa", country: "Панама"},
+    {code: "pg", country: "Папуа — Новая Гвинея"},
+    {code: "py", country: "Парагвай"},
+    {code: "pe", country: "Перу"},
+    {code: "ph", country: "Филиппины"},
+    {code: "pl", country: "Польша"},
+    {code: "pt", country: "Португалия"},
+    {code: "qa", country: "Катар"},
+    {code: "ro", country: "Румыния"},
+    {code: "ru", country: "Россия"},
+    {code: "rw", country: "Руанда"},
+    {code: "kn", country: "Сент-Китс и Невис"},
+    {code: "lc", country: "Сент-Люсия"},
+    {code: "vc", country: "Сент-Винсент и Гренадины"},
+    {code: "ws", country: "Самоа"},
+    {code: "sm", country: "Сан-Марино"},
+    {code: "st", country: "Сан-Томе и Принсипи"},
+    {code: "sa", country: "Саудовская Аравия"},
+    {code: "sn", country: "Сенегал"},
+    {code: "rs", country: "Сербия"},
+    {code: "sc", country: "Сейшелы"},
+    {code: "sl", country: "Сьерра-Леоне"},
+    {code: "sg", country: "Сингапур"},
+    {code: "sk", country: "Словакия"},
+    {code: "si", country: "Словения"},
+    {code: "sb", country: "Соломоновы Острова"},
+    {code: "so", country: "Сомали"},
+    {code: "za", country: "Южная Африка"},
+    {code: "ss", country: "Южный Судан"},
+    {code: "es", country: "Испания"},
+    {code: "lk", country: "Шри-Ланка"},
+    {code: "sd", country: "Судан"},
+    {code: "sr", country: "Суринам"},
+    {code: "se", country: "Швеция"},
+    {code: "ch", country: "Швейцария"},
+    {code: "sy", country: "Сирия"},
+    {code: "tw", country: "Тайвань"},
+    {code: "tj", country: "Таджикистан"},
+    {code: "tz", country: "Танзания"},
+    {code: "th", country: "Таиланд"},
+    {code: "tl", country: "Тимор-Лесте"},
+    {code: "tg", country: "Того"},
+    {code: "to", country: "Тонга"},
+    {code: "tt", country: "Тринидад и Тобаго"},
+    {code: "tn", country: "Тунис"},
+    {code: "tr", country: "Турция"},
+    {code: "tm", country: "Туркмения"},
+    {code: "tv", country: "Тувалу"},
+    {code: "ug", country: "Уганда"},
+    {code: "ua", country: "Украина"},
+    {code: "ae", country: "ОАЭ"},
+    {code: "gb", country: "Великобритания"},
+    {code: "us", country: "США"},
+    {code: "uy", country: "Уругвай"},
+    {code: "uz", country: "Узбекистан"},
+    {code: "vu", country: "Вануату"},
+    {code: "va", country: "Ватикан"},
+    {code: "ve", country: "Венесуэла"},
+    {code: "vn", country: "Вьетнам"},
+    {code: "ye", country: "Йемен"},
+    {code: "zm", country: "Замбия"},
+    {code: "zw", country: "Зимбабве"},
+    {code: "xk", country: "Косово"},
+    {code: "bn", country: "Бруней"},
+    {code: "nr", country: "Науру"},
+    {code: "ci", country: "Кот-д'Ивуар"},
+    {code: "ag", country: "Антигуа и Барбуда"},
+    {code: "sz", country: "Эсватини"}
+  ];
+
+  let currentIndex = 0;
+
+  function showFlag() {
+    document.getElementById("flag").src = `https://flagcdn.com/w320/${flags[currentIndex].code}.png`;
+    document.getElementById("country").textContent = "";
+  }
+
+  function showCountry() {
+    document.getElementById("country").textContent = flags[currentIndex].country;
+  }
+
+  function nextFlag() {
+    //currentIndex = (currentIndex + 1) % flags.length;
+    currentIndex = Math.floor(Math.random() * flags.length);
+    showFlag();
+  }
+
+  // Инициализация
+  showFlag();
+</script>
+</body>
+</html>
