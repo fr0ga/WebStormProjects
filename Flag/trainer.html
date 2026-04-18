@@ -232,6 +232,7 @@
   }
 
   function nextFlag() {
+    //currentIndex = (currentIndex + 1) % flags.length;
     currentIndex = Math.floor(Math.random() * flags.length);
     showFlag();
   }
